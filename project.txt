@@ -1,0 +1,32 @@
+mkdir angular-node-backend
+cd angular-node-backend
+
+
+// this commond to install package.json file
+npm init -y
+
+//all package i want to install
+npm install express mysql2 jsonwebtoken bcryptjs cors dotenv multer
+
+//Dev packages (for TypeScript):
+npm install --save-dev typescript ts-node nodemon @types/node @types/express @types/cors @types/jsonwebtoken @types/bcryptjs
+
+
+//Initialize tsconfig.json
+npx tsc --init
+
+after chnage file of tsconfig{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist"]
+}
