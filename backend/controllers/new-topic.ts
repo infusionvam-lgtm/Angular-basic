@@ -107,7 +107,7 @@ export class TopicComponent implements OnInit {
 onPropertySelectionChange(selectedValues: any[]) {
   console.log('Selected Property Values:', selectedValues);
 
-  this.selectedProperties = selectedValues;
+  this.selectedProperties = selectedValues[0];
 
   if (!selectedValues || selectedValues.length === 0) {
     // Reset everything
@@ -369,17 +369,17 @@ updateTopicList(propertyIds: string[], keepSelectedTopic = false) {
 
   submit() {
     console.log("submit" + this.selectedProperty?.label?.uuid);
-    if (!this.selectedProperty?.label?.uuid) {
+    if (!this.selectedProperties || this.selectedProperties.length === 0) {
       this.errorMessage = 'Please select a property before submitting.';
       return;
     }
 
-    const data = {
-      propertyId: this.selectedProperty.label.uuid,
-      topicKey: this.form.value.topicKey,
-      topicValue: this.form.value.topicValue
-    };
-  
+      const data = {
+        propertyIds: this.selectedProperties,         
+        key: this.form.value.topicKey,               
+        values: this.form.value.topicValue           
+      };
+      console.log('data: ', data);
     const onSuccess = (message: string) => {
       this.successMessage = message;
       this.form.patchValue({
@@ -399,7 +399,7 @@ updateTopicList(propertyIds: string[], keepSelectedTopic = false) {
     this.showSpinner('sp5');
   
     if (this.isEdit) {
-      this.adminService.updateTopic(this.form.value.topicId, data).subscribe(
+      this.adminService.updateValuesForSelectedKeyAndProperties(data).subscribe(
         () => onSuccess('Topic Updated Successfully'),
         (error) => {
           this.hideSpinner('sp5');

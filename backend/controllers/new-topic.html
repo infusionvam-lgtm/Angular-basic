@@ -20,6 +20,8 @@
                         <app-multiselect
                             [options]="propertyList"
                             [(selectedItems)]="selectedProperties"
+                            valueKey="value"
+                            displayKey="label"
                             [isMultiple]="true"
                             (selectionChange)="onPropertySelectionChange($event)"
                             placeholder="Please select Properties"
