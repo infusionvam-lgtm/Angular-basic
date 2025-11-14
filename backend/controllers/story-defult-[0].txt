@@ -1,0 +1,84 @@
+setSelectedProperty(selectedValue: string | string[] | undefined, refreshFilter: boolean) {
+  // 1. Handle empty selection
+  if (
+    !selectedValue ||
+    (Array.isArray(selectedValue) && selectedValue.length === 0)
+  ) {
+    const defaultProperty = this.PropertyList[0];
+
+    this.selectedAccountOptions = [
+      {
+        item_id: defaultProperty.value,
+        item_text: defaultProperty.label,
+      },
+    ];
+
+    // Reset default property references
+    this.selectedProperties = [defaultProperty];
+    this.selectedProperty = defaultProperty;
+    this.selectedPropertyValue = defaultProperty.value;
+
+    // Load default property data
+    const data = { properties: defaultProperty.value };
+    this.loadMultipleData(data, refreshFilter);
+    return; //  Exit early to avoid running below logic
+  }
+
+  // 2. Handle "consolidate" selection
+  if (selectedValue === "consolidate") {
+    this.ChangePropertyType(selectedValue);
+    return;
+  }
+
+  // 3. Continue only if property list exists
+  if (this.PropertyList.length > 0) {
+    // Always make sure it's an array
+    const valueArray =
+      Array.isArray(selectedValue) && selectedValue.length > 0
+        ? selectedValue
+        : [];
+
+    // Get all selected property objects
+    let  selectedProperties = this.PropertyList.filter((p) =>
+      valueArray.includes(p.value)
+    );
+    // Store all selected properties
+    this.selectedProperties = [...new Set(selectedProperties)]; // remove duplicate objects if any
+
+    // Keep first one for UI or default reference
+    this.selectedProperty = this.selectedProperties.length
+      ? this.selectedProperties
+      : null;
+
+    // Keep selected values array
+    this.selectedPropertyValue = selectedValue;
+
+    // Add experienceType for all selected properties
+    this.selectedProperties.forEach((p) => (p.experienceType = "CX"));
+
+    // Remove any duplicate property IDs before calling API
+    const uniquePropertyIds = [...new Set(selectedValue)];
+    const data = { properties: uniquePropertyIds.join(",") };
+
+
+    // Load all property data together
+    this.loadMultipleData(data, refreshFilter);
+  } else {
+    this.hideSpinner("sp5");
+  }
+}
+
+    // saveTopicData(propertyName: string, topics: any) {
+    //     localStorage.setItem(propertyName + '_topics', JSON.stringify(topics.map((topic) => topic.key)));
+    //     const attributions = [];
+    //     topics.map((topic) => {
+    //         if (topic.values) {
+    //             const attr_values = topic.values.split(",");
+    //             this.saveAttributionData(propertyName + topic.key + '_attributions', topic.values.split(","));
+    //             attr_values.map((value) => {
+    //                 attributions.push(value);
+    //             })
+    //         }
+    //     });
+    //     this.saveTotalAttributionData(propertyName + '_total', [...new Set(attributions)]);
+    // }

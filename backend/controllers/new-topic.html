@@ -1,0 +1,74 @@
+<app-breadcrumb></app-breadcrumb>
+<div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="successMessage">
+    {{successMessage}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="successMessage = ''">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="errorMessage">
+    {{errorMessage}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="clearMessage()"><span
+            aria-hidden="true">×</span></button>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="mb-3 col-md-3">
+                        <label>Property</label>
+                        <app-multiselect
+                            [options]="propertyList"
+                            [(selectedItems)]="selectedProperties"
+                            [isMultiple]="true"
+                            (selectionChange)="onPropertySelectionChange($event)"
+                            placeholder="Please select Properties"
+                        ></app-multiselect>
+                    </div>
+                    <!-- <div class="mb-3 col-md-3">
+                        <label>Property</label>
+                        <select [(ngModel)]="selectedPropertyId"
+                            [ngModelOptions]="{standalone: true}"
+                            (change)="onPropertyChange($event.target.value)" class="form-control form-control-default">
+                            <option value="">Please select Property</option>
+                            <option *ngFor="let prop of propertyList; trackBy: trackByProperty" [value]="prop.value">
+                                {{ prop.label.propertyName }}
+                            </option>
+                          </select>
+                    </div> -->
+                    <div class="mb-3 col-md-3">
+                        <label>Topic</label>
+                        <select name="selectedTopicId" #userTopicSelect class="form-control form-control-default"
+                            (change)='onUserTopicSelected(userTopicSelect.value)' [ngModelOptions]="{standalone: true}"  [(ngModel)]="selectedTopicId">
+                            <option value=""  selected>Please select Topic</option>
+                            <option *ngFor="let topic of topicList" [value]="topic.label">
+                                {{ topic.label }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <button class="btn btn-primary custom-add-button" (click)="addTopic()" [disabled]='disableAddButton'> Add New Topic </button>
+                    </div>
+                </div>
+                <div class="card ">
+                    <div class="card-header"> <b>Topic</b> </div>
+                    <div class="card-body">
+                        <form [formGroup]="form" (ngSubmit)="submit()">
+                            <div class="form-group">
+                                <label for="message">Key</label>
+                                <input type="text" class="form-control" name ="topicKey" id="topicKey" name="topicKey" placeholder="Topic Key" formControlName="topicKey">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Value</label>
+                                <textarea class="form-control" id="topicValue" rows="8" name="topicValue" placeholder="Attributes"  formControlName="topicValue" ></textarea>
+                            </div>
+                            <button class="btn btn-primary mb-4" type="submit">Save Topic</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner name="sp5" type="square-jelly-box"></ngx-spinner>
